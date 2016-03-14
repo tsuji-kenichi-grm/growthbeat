@@ -21,6 +21,8 @@ import com.growthpush.model.Environment;
 import com.growthpush.model.Event;
 import com.growthpush.model.Tag;
 
+import com.growthpush.handler.MyReceiveHandler;
+
 public class GrowthPush {
 
     public static final String LOGGER_DEFAULT_TAG = "GrowthPush";
@@ -73,6 +75,8 @@ public class GrowthPush {
 
         this.applicationId = applicationId;
         this.credentialId = credentialId;
+
+        setReceiveHandler(new MyReceiveHandler());
 
         GrowthbeatCore.getInstance().initialize(context, applicationId, credentialId);
         this.preference.setContext(GrowthbeatCore.getInstance().getContext());
