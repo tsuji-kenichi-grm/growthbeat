@@ -8,48 +8,12 @@ import android.os.Debug;
 import android.util.Log;
 
 import com.growthbeat.Logger;
+import com.growthbeat.MyApplication;
 
 /**
  * Created by B06423 on 2016/03/11.
  */
 public class MyReceiveHandler extends BaseReceiveHandler {
-
-    private static class ActivityLifeCycleListener implements Application.ActivityLifecycleCallbacks {
-
-        private final Logger logger = new Logger("GrowthPushEx");
-
-        @Override
-        public void onActivityCreated(Activity activity, android.os.Bundle savedInstanceState) {
-            logger.debug("push call onActivityCreated:" + activity);
-        }
-
-        @Override
-        public void onActivityStarted(Activity activity) {
-        }
-
-        @Override
-        public void onActivityResumed(Activity activity) {
-            logger.debug("push call onActivityResumed:" + activity);
-        }
-
-        @Override
-        public void onActivitySaveInstanceState(Activity activity, android.os.Bundle outState) {
-        }
-
-        @Override
-        public void onActivityPaused(Activity activity) {
-            logger.debug("push call onActivityPaused:" + activity);
-        }
-
-        @Override
-        public void onActivityStopped(Activity activity)
-        {
-        }
-        @Override
-        public void onActivityDestroyed(Activity activity)
-        {
-        }
-    }
 
     public MyReceiveHandler() {
         super();
@@ -65,13 +29,18 @@ public class MyReceiveHandler extends BaseReceiveHandler {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Log.d("Tonic", "onReceive");
-
-       // if(isRunning) {
+        MyApplication   myApp = (MyApplication)context.getApplicationContext();
+        boolean isActive = false;
+        if( myApp != null ) {
+            isActive = myApp.IsActive();
+            Log.d("Tonic", "onReceive:" + isActive);
+        }
+        // アクティブだったら通知を取得しない
+        if(!isActive) {
             super.onReceive(context, intent);
             showAlert(context, intent);
             addNotification(context, intent);
-       // }
+        }
     }
 
 }
